@@ -30,7 +30,17 @@ public class Evento {
 
     // COSTRUTTORE
 
-    public Evento(String title, LocalDate date, int totalPlaces) {
+    public Evento(String title, LocalDate date, int totalPlaces) throws IllegalArgumentException {
+        // controlli per  il cpstruttore
+        if (date.isBefore(LocalDate.now())) {
+            throw new IllegalArgumentException("L'evento è già passato.");
+        }
+
+        if(totalPlaces<0){
+            throw new IllegalArgumentException("L'evento non può avere un numero di posti negativo");
+        }
+
+        // attributi
         this.title = title;
         this.date = date;
         this.totalPlaces = totalPlaces;
@@ -67,17 +77,19 @@ public class Evento {
 
     // prenota
     public void prenota(int numeroPosti) throws IllegalArgumentException{
-        //prenota : aggiunge un certo numero di posti prenotati. Se l’evento è già passato o non ha posti disponibili deve sollevare un’eccezione.
+        //prenoif (date.isBefore(LocalDate.now())) {
+        //            throw new IllegalArgumentException("L'evento è già passato.");
+        //        }ta : aggiunge un certo numero di posti prenotati. Se l’evento è già passato o non ha posti disponibili deve sollevare un’eccezione.
         // verifica data
-        if (date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("L'evento è già passato.");
-        }
+
 
         // verifica posti disponibili
         if (numeroPosti > totalPlaces) {
             throw new IllegalArgumentException("Non ci sono abbastanza posti disponibili.");
         }
-
+        if (numeroPosti <0 ) {
+            throw new IllegalArgumentException("Non puoi prenotare un numero negativo di posti.");
+        }
         // aggiorna i posti prenotati
         bookedPlaces += numeroPosti;
 
@@ -87,9 +99,10 @@ public class Evento {
     // disdici
     public void disdici(int numeroPosti) throws IllegalArgumentException {
         // verifica data evento
-        if (date.isBefore(LocalDate.now())) {
+        /*
+        * if (date.isBefore(LocalDate.now())) {
             throw new IllegalArgumentException("L'evento è già passato.");
-        }
+        }*/
 
         // Vverifica se si puo disdire o meno
         if (numeroPosti > bookedPlaces) {
