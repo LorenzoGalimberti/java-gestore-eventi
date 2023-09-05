@@ -20,6 +20,7 @@ Aggiungete eventuali metodi (public e private) che vi aiutino a svolgere le funz
 package eventi;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Evento {
     // ATTRIBUTI
@@ -114,6 +115,14 @@ public class Evento {
 
         // Aggiorna il numero di posti disponibili
         totalPlaces += numeroPosti;
+    }
+    // metodo per formattare la data nel formato "yyyy-MM-dd"
+    public String formatData() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(formatter);
+    }
+    public String getDataFormattata() {
+        return formatData();
     }
     // tostring
 
