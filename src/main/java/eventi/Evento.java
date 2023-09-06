@@ -19,8 +19,11 @@ Aggiungete eventuali metodi (public e private) che vi aiutino a svolgere le funz
 
 package eventi;
 
+import java.security.InvalidParameterException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Evento {
     // ATTRIBUTI
@@ -31,15 +34,28 @@ public class Evento {
 
     // COSTRUTTORE
 
-    public Evento(String title, LocalDate date, int totalPlaces) throws IllegalArgumentException {
+    public Evento(String title, LocalDate date, int totalPlaces) throws InvalidEventParametersException {
+        boolean invalid=false;
+        if (Utilities.isDateInThePast(date) || Utilities.isNotPositiveNumber(totalPlaces) ||  Utilities.isEmptyString(title) )
+            invalid=true;
         // controlli per  il cpstruttore
-        if (date.isBefore(LocalDate.now())) {
-            throw new IllegalArgumentException("L'evento è già passato.");
+        if (invalid){
+            List<String> messages = new ArrayList<>();
+            if (Utilities.isDateInThePast(date)) {
+                messages.add("La data inserita è già passata ");
+                //throw new IllegalArgumentException("L'evento è già passato.");
+            }
+
+            if(Utilities.isNotPositiveNumber(totalPlaces)){
+                messages.add("L'evento non può avere un numero di posti negativo");
+                //throw new IllegalArgumentException("L'evento non può avere un numero di posti negativo");
+            }
+            if(Utilities.isEmptyString(title)){
+                messages.add("Titolo invaldo");
+            }
+            throw new InvalidEventParametersException(String.join(", ",messages));
         }
 
-        if(totalPlaces<0){
-            throw new IllegalArgumentException("L'evento non può avere un numero di posti negativo");
-        }
 
         // attributi
         this.title = title;
@@ -62,8 +78,12 @@ public class Evento {
         return date;
     }
 
-    public void setDate(LocalDate date) {
+    public void setDate(LocalDate date) throws IllegalArgumentException{
+        if(date.isBefore(LocalDate.now())){
+            throw new IllegalArgumentException("la data inserita è nel passato ");
+        }
         this.date = date;
+
     }
 
     public int getTotalPlaces() {
